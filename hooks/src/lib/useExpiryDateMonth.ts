@@ -21,10 +21,7 @@ interface UseExpiryDateMonthProps {
   validations: Validations;
 }
 
-export default function useExpiryDateMonth<E extends HTMLInputElement>({
-  initialValue,
-  validations,
-}: UseExpiryDateMonthProps) {
+export default function useExpiryDateMonth({ initialValue, validations }: UseExpiryDateMonthProps) {
   const onChangeValidators: Validator[] = Object.entries(validations.onChange || {}).map(([key, errorMessage]) => ({
     test: validators[key as keyof ValidationErrors],
     errorMessage,
@@ -40,9 +37,9 @@ export default function useExpiryDateMonth<E extends HTMLInputElement>({
     setValue: setMonth,
     isValid,
     errorMessage,
-    onChange,
-    onBlur,
-  } = useSingleInput<E>({
+    handleChange,
+    handleBlur,
+  } = useSingleInput({
     initialValue,
     validations: { onChange: onChangeValidators, onBlur: onBlurValidators },
   });
@@ -52,7 +49,7 @@ export default function useExpiryDateMonth<E extends HTMLInputElement>({
     setMonth,
     isValid,
     errorMessage,
-    handleChange: onChange,
-    handleBlur: onBlur,
+    handleChange,
+    handleBlur,
   };
 }

@@ -1,4 +1,4 @@
-import { MONTH } from '../constants';
+import { CENTURY_PREFIX, MONTH } from '../constants';
 
 export const validateFilledValue = (value: string) => {
   return !!value;
@@ -14,7 +14,7 @@ export const validateLength = (value: string, length: number) => {
 
 export const validateYear = (year: string) => {
   const currentDate = new Date();
-  return Number(year) >= currentDate.getFullYear() - 2000;
+  return Number(year) >= currentDate.getFullYear() - CENTURY_PREFIX;
 };
 
 export const validateMonth = (month: string) => {
@@ -25,7 +25,7 @@ export const validateMonth = (month: string) => {
 export const validateDate = (value: string, name: string) => {
   const currentDate = new Date();
 
-  if (name === 'year') return value === '' || Number(value) + 2000 >= currentDate.getFullYear();
+  if (name === 'year') return value === '' || Number(value) + CENTURY_PREFIX >= currentDate.getFullYear();
   if (name === 'month') return value === '' || Number(value) >= currentDate.getMonth() + 1;
   return false;
 };

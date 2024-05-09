@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import { useSingleInput } from '.';
 import { VALID_LENGTH } from './constants';
 import { Validations, Validator, Validators } from './types';
@@ -20,7 +21,7 @@ const validators: Validators<keyof ValidationErrors> = {
   length: (value: string) => validateLength(value, VALID_LENGTH.password),
 };
 
-export default function usePassword<E extends HTMLInputElement>({ initialValue, validations }: UsePasswordProps) {
+export default function usePassword({ initialValue, validations }: UsePasswordProps) {
   const onChangeValidators: Validator[] = Object.entries(validations.onChange || {}).map(([key, errorMessage]) => ({
     test: validators[key as keyof ValidationErrors],
     errorMessage,
@@ -36,12 +37,17 @@ export default function usePassword<E extends HTMLInputElement>({ initialValue, 
     setValue: setPassword,
     isValid,
     errorMessage,
-    onChange,
-    onBlur,
-  } = useSingleInput<E>({
+    handleChange,
+    handleBlur,
+  } = useSingleInput({
     initialValue,
     validations: { onChange: onChangeValidators, onBlur: onBlurValidators },
   });
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { value } = e.target;
+    handleChange(value);
+  };
 
   return {
     password,
@@ -49,7 +55,7 @@ export default function usePassword<E extends HTMLInputElement>({ initialValue, 
     isValid,
     errorMessage,
     validators: [...onChangeValidators, ...onBlurValidators],
-    handleChange: onChange,
-    handleBlur: onBlur,
+    onChange,
+    onBlur: handleBlur,
   };
 }

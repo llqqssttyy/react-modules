@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import { useSingleInput } from '.';
 import { ALPHABET_REGEXP } from './constants';
 import { Validations, Validator, Validators } from './types';
@@ -20,7 +21,7 @@ const validators: Validators<keyof ValidationErrors> = {
   },
 };
 
-export default function useCardHolder<E extends HTMLInputElement>({ initialValue, validations }: UseCardHolderProps) {
+export default function useCardHolder({ initialValue, validations }: UseCardHolderProps) {
   const onChangeValidators: Validator[] = Object.entries(validations.onChange || {}).map(([key, errorMessage]) => ({
     test: validators[key as keyof ValidationErrors],
     errorMessage,
@@ -36,12 +37,17 @@ export default function useCardHolder<E extends HTMLInputElement>({ initialValue
     setValue: setCardHolder,
     isValid,
     errorMessage,
-    onChange,
-    onBlur,
-  } = useSingleInput<E>({
+    handleChange,
+    handleBlur,
+  } = useSingleInput({
     initialValue,
     validations: { onChange: onChangeValidators, onBlur: onBlurValidators },
   });
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { value } = e.target;
+    handleChange(value);
+  };
 
   return {
     cardHolder,
@@ -49,7 +55,7 @@ export default function useCardHolder<E extends HTMLInputElement>({ initialValue
     isValid,
     errorMessage,
     validators: [...onChangeValidators, ...onBlurValidators],
-    handleChange: onChange,
-    handleBlur: onBlur,
+    onChange,
+    onBlur: handleBlur,
   };
 }

@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import { useSingleInput } from '.';
 import { VALID_LENGTH } from './constants';
 import { Validations, Validator, ValidatorFunction } from './types';
@@ -36,7 +37,7 @@ interface UseCVCProps {
  * @returns {Function} handleChange - 입력 변경 이벤트에 대한 이벤트 핸들러로, onChange 검증기를 기반으로 검증 상태를 업데이트합니다.
  * @returns {Function} handleBlur - 입력 포커스 이탈 이벤트에 대한 이벤트 핸들러로, onBlur 검증기를 기반으로 검증 상태를 업데이트합니다.
  */
-export default function useCVC<E extends HTMLInputElement>({ initialValue, validations }: UseCVCProps) {
+export default function useCVC({ initialValue, validations }: UseCVCProps) {
   const onChangeValidators: Validator[] = Object.entries(validations.onChange || {}).map(([key, errorMessage]) => ({
     test: validators[key as keyof ValidationErrors],
     errorMessage,
@@ -52,12 +53,17 @@ export default function useCVC<E extends HTMLInputElement>({ initialValue, valid
     setValue: setCVC,
     isValid,
     errorMessage,
-    onChange,
-    onBlur,
-  } = useSingleInput<E>({
+    handleChange,
+    handleBlur,
+  } = useSingleInput({
     initialValue,
     validations: { onChange: onChangeValidators, onBlur: onBlurValidators },
   });
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const { value } = e.target;
+    handleChange(value);
+  };
 
   return {
     cvc,
@@ -65,7 +71,7 @@ export default function useCVC<E extends HTMLInputElement>({ initialValue, valid
     isValid,
     errorMessage,
     validators: [...onChangeValidators, ...onBlurValidators],
-    handleChange: onChange,
-    handleBlur: onBlur,
+    onChange,
+    onBlur: handleBlur,
   };
 }

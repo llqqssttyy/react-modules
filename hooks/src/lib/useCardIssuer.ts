@@ -1,3 +1,4 @@
+import { ChangeEventHandler } from 'react';
 import { useSingleInput } from '.';
 import { Validations, Validator, ValidatorFunction } from './types';
 import { validateFilledValue } from './utils/validators';
@@ -31,12 +32,17 @@ export default function useCardIssuer({ initialValue, validations }: UseCardIssu
     setValue: setCardIssuer,
     isValid,
     errorMessage,
-    onChange,
-    onBlur,
-  } = useSingleInput<HTMLSelectElement>({
+    handleChange,
+    handleBlur,
+  } = useSingleInput({
     initialValue,
     validations: { onChange: onChangeValidators, onBlur: onBlurValidators },
   });
+
+  const onChange: ChangeEventHandler<HTMLSelectElement> = (e) => {
+    const { value } = e.target;
+    handleChange(value);
+  };
 
   return {
     cardIssuer,
@@ -44,7 +50,7 @@ export default function useCardIssuer({ initialValue, validations }: UseCardIssu
     isValid,
     errorMessage,
     validators: [...onChangeValidators, ...onBlurValidators],
-    handleChange: onChange,
-    handleBlur: onBlur,
+    onChange,
+    onBlur: handleBlur,
   };
 }

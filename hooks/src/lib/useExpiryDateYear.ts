@@ -21,10 +21,7 @@ interface UseExpiryDateYearProps {
   validations: Validations;
 }
 
-export default function useExpiryDateYear<E extends HTMLInputElement>({
-  initialValue,
-  validations,
-}: UseExpiryDateYearProps) {
+export default function useExpiryDateYear({ initialValue, validations }: UseExpiryDateYearProps) {
   const onChangeValidators: Validator[] = Object.entries(validations.onChange || {}).map(([key, errorMessage]) => ({
     test: validators[key as keyof ValidationErrors],
     errorMessage,
@@ -40,9 +37,9 @@ export default function useExpiryDateYear<E extends HTMLInputElement>({
     setValue: setYear,
     isValid,
     errorMessage,
-    onChange,
-    onBlur,
-  } = useSingleInput<E>({
+    handleChange,
+    handleBlur,
+  } = useSingleInput({
     initialValue,
     validations: { onChange: onChangeValidators, onBlur: onBlurValidators },
   });
@@ -52,7 +49,7 @@ export default function useExpiryDateYear<E extends HTMLInputElement>({
     setYear,
     isValid,
     errorMessage,
-    handleChange: onChange,
-    handleBlur: onBlur,
+    handleChange,
+    handleBlur,
   };
 }

@@ -32,20 +32,20 @@ export default function useExpiryDate<E extends HTMLInputElement>({ initialValue
     handleBlur: handleYearBlur,
   } = useExpiryDateYear({ initialValue: initialValues.year, validations: { ...validations.year } });
 
-  const handleChange: ChangeEventHandler<E> = (e) => {
-    const { name } = e.currentTarget;
+  const onChange: ChangeEventHandler<E> = (e) => {
+    const { name, value } = e.currentTarget;
 
-    if (name === 'month') handleMonthChange(e);
+    if (name === 'month') handleMonthChange(value);
 
-    if (name === 'year') handleYearChange(e);
+    if (name === 'year') handleYearChange(value);
   };
 
-  const handleBlur: FocusEventHandler<E> = (e) => {
+  const onBlur: FocusEventHandler<E> = (e) => {
     const { name } = e.currentTarget;
 
-    if (name === 'month') handleMonthBlur(e);
+    if (name === 'month') handleMonthBlur();
 
-    if (name === 'year') handleYearBlur(e);
+    if (name === 'year') handleYearBlur();
   };
 
   const setExpiryDate = (value: string, name: string) => {
@@ -61,7 +61,7 @@ export default function useExpiryDate<E extends HTMLInputElement>({ initialValue
       if (!isYearValid) return yearErrorMessage;
       return null;
     })(),
-    handleChange,
-    handleBlur,
+    onChange,
+    onBlur,
   };
 }

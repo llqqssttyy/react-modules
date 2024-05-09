@@ -1,7 +1,7 @@
 import { usePassword } from '../lib';
 
 export default function CardPassword() {
-  const passwordResult = usePassword<HTMLInputElement>({
+  const passwordResult = usePassword({
     initialValue: '',
     validations: {
       onChange: {
@@ -21,8 +21,8 @@ export default function CardPassword() {
         value={passwordResult.password}
         type="password"
         maxLength={2}
-        onBlur={passwordResult.handleBlur}
-        onChange={passwordResult.handleChange}
+        onBlur={passwordResult.onBlur}
+        onChange={passwordResult.onChange}
       />
       <div>오류 :{passwordResult.errorMessage}</div>
     </div>

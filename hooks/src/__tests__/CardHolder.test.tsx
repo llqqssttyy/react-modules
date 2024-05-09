@@ -1,6 +1,6 @@
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CardHolder } from '../components';
-import '@testing-library/jest-dom';
 
 describe('CardHolder', () => {
   it('초기 상태 확인', () => {

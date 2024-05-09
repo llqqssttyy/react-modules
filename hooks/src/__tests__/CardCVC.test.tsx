@@ -1,6 +1,6 @@
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import CardCVC from '../components/CardCVC';
-import '@testing-library/jest-dom';
 
 describe('CardCVC', () => {
   it('초기 상태 확인', () => {

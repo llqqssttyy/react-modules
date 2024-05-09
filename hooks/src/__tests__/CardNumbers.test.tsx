@@ -1,43 +1,44 @@
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CardNumbers } from '../components';
-import '@testing-library/jest-dom';
 
 describe('CardNumbers', () => {
   it('초기 상태 확인', () => {
     render(<CardNumbers />);
-    const inputs = screen.getAllByRole('textbox');
+    const input = screen.getByRole('textbox');
     const errorMessage = screen.getByText('오류:');
 
-    inputs.forEach((input) => {
-      expect(input).toHaveValue('');
-    });
+    expect(input).toHaveValue('');
     expect(errorMessage).toHaveTextContent('오류:');
   });
 
-  it('카드 번호는 숫자가 아닌 문자를 입력할 수 없다.', () => {
-    const invalidInputs = ['%!!!', 'aaaa'];
-
-    test.each(invalidInputs)('입력 값 "%s"는 유효하지 않다', (invalidInput) => {
-      render(<CardNumbers />);
-      const input = screen.getByRole('textbox');
-      const errorMessage = screen.getByText('오류:');
-
-      fireEvent.change(input, { target: { value: invalidInput } });
-
-      expect(input).toHaveTextContent('');
-      expect(errorMessage).toHaveTextContent('숫자만 사용 가능해요.');
-    });
-  });
-
-  it('카드 번호로 숫자 4개가 입력되지 않으면 에러 문구를 보여준다.', () => {
+  test.each(['%', 'a'])('카드 번호는 숫자가 아닌 문자를 입력할 수 없다. - "%s"', (invalidInput) => {
     render(<CardNumbers />);
     const input = screen.getByRole('textbox');
     const errorMessage = screen.getByText('오류:');
 
-    fireEvent.change(input, { target: { value: '123' } });
+    fireEvent.change(input, { target: { value: invalidInput } });
+
+    expect(input).toHaveTextContent('');
+    expect(errorMessage).toHaveTextContent('숫자만 사용 가능해요.');
+  });
+
+  test.each([
+    ['visa', 16, '4'],
+    ['master', 16, '51'],
+    ['diners', 14, '36'],
+    ['amex', 15, '34'],
+    ['union', 16, '622126'],
+    ['etc', 16, '1234'],
+  ])('%s는 %d자리가 입력되지 않으면 에러 문구를 보여준다.', (_, count, value) => {
+    render(<CardNumbers />);
+    const input = screen.getByRole('textbox');
+    const errorMessage = screen.getByText('오류:');
+
+    fireEvent.change(input, { target: { value } });
     fireEvent.blur(input);
 
-    expect(errorMessage).toHaveTextContent('4개 숫자를 써주세요.');
+    expect(errorMessage).toHaveTextContent(`${count}자리를 입력해 주세요.`);
   });
 
   it('카드 번호는 반드시 입력되어야 한다.', () => {
@@ -51,18 +52,19 @@ describe('CardNumbers', () => {
     expect(errorMessage).toHaveTextContent('카드 번호를 입력해주세요.');
   });
 
-  it('input에 유효한 값을 입력할 수 있다.', () => {
+  test.each([
+    ['visa', [4, 4, 4, 4], '4111 1111 1111 1111'],
+    ['master', [4, 4, 4, 4], '5111 1111 1111 1111'],
+    ['diners', [4, 6, 4], '3611 111111 1111'],
+    ['amex', [4, 6, 5], '3411 111111 11111'],
+    ['union', [4, 4, 4, 4], '6221 2611 1111 1111'],
+    ['etc', [4, 4, 4, 4], '1111 1111 1111 1111'],
+  ])('%s는 %s자리로 포맷팅되어야 한다.', (_, __, formattedValue) => {
     render(<CardNumbers />);
-    const inputs = screen.getAllByRole('textbox');
-    const errorMessage = screen.getByText('오류:');
-    const VALID_INPUT = ['1234', '1234', '1234', '1234'];
+    const input = screen.getByRole('textbox');
 
-    inputs.forEach((input, index) => {
-      fireEvent.change(input, { target: { value: VALID_INPUT[index] } });
-    });
-    inputs.forEach((input, index) => {
-      expect(input).toHaveTextContent(VALID_INPUT[index]);
-      expect(errorMessage).toHaveTextContent('오류:');
-    });
+    fireEvent.change(input, { target: { value: formattedValue.split(' ').join('') } });
+
+    expect(input).toHaveValue(formattedValue);
   });
 });

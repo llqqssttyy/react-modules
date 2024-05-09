@@ -1,6 +1,6 @@
+import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CardPassword } from '../components';
-import '@testing-library/jest-dom';
 
 describe('CardPassword', () => {
   it('초기 상태 확인', () => {

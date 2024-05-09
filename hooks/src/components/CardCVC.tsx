@@ -1,7 +1,7 @@
 import { useCVC } from '../lib';
 
 export default function CardCVC() {
-  const cvcResult = useCVC<HTMLInputElement>({
+  const cvcResult = useCVC({
     initialValue: '',
     validations: {
       onChange: {
@@ -22,8 +22,8 @@ export default function CardCVC() {
         type="text"
         data-testid="cvc-input"
         maxLength={3}
-        onBlur={cvcResult.handleBlur}
-        onChange={cvcResult.handleChange}
+        onBlur={cvcResult.onBlur}
+        onChange={cvcResult.onChange}
       />
       <div data-testid="cvc-error">오류 :{cvcResult.errorMessage}</div>
     </div>

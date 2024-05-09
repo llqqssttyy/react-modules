@@ -1,7 +1,7 @@
 import { useExpiryDate } from '../lib';
 
 export default function CardExpiryDate() {
-  const { expiryDate, handleChange, handleBlur, errorMessage } = useExpiryDate({
+  const { expiryDate, onChange, onBlur, errorMessage } = useExpiryDate({
     initialValues: {
       month: '',
       year: '',
@@ -32,22 +32,8 @@ export default function CardExpiryDate() {
 
   return (
     <div>
-      <input
-        maxLength={2}
-        name="month"
-        value={expiryDate.month}
-        type="text"
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      <input
-        maxLength={2}
-        name="year"
-        value={expiryDate.year}
-        type="text"
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
+      <input maxLength={2} name="month" value={expiryDate.month} type="text" onChange={onChange} onBlur={onBlur} />
+      <input maxLength={2} name="year" value={expiryDate.year} type="text" onChange={onChange} onBlur={onBlur} />
       <div>오류:{errorMessage}</div>
     </div>
   );

@@ -1,16 +1,36 @@
-export const CARD_NUMBERS_PART_LENGTH = 4;
-
-export const CARD_NUMBERS_GROUP_LENGTH = 4;
-
-export const CARD_BRAND = {
+export const CARD_BRAND: Omit<CardBrand, 'etc'> = {
   visa: {
-    prefixNumberCount: 1,
-    startNumber: 4,
+    cardNumberCount: 16,
+    prefixes: [4],
+    segmentLength: [4, 4, 4, 4],
   },
+
   master: {
-    startNumber: 51,
-    endNumber: 55,
-    prefixNumberCount: 2,
+    cardNumberCount: 16,
+    prefixes: [{ from: 51, to: 55 }],
+    segmentLength: [4, 4, 4, 4],
+  },
+
+  diners: {
+    cardNumberCount: 14,
+    prefixes: [36],
+    segmentLength: [4, 6, 4],
+  },
+
+  amex: {
+    cardNumberCount: 15,
+    prefixes: [34, 37],
+    segmentLength: [4, 6, 5],
+  },
+
+  union: {
+    cardNumberCount: 16,
+    prefixes: [
+      { from: 622126, to: 622925 },
+      { from: 624, to: 626 },
+      { from: 6282, to: 6288 },
+    ],
+    segmentLength: [4, 4, 4, 4],
   },
 };
 

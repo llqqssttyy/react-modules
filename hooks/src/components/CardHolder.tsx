@@ -16,7 +16,7 @@ export default function CardHolder() {
   return (
     <div>
       <h3>card holder</h3>
-      <input value={cardHolderResult.cardHolder} type="text" maxLength={50} onChange={cardHolderResult.handleChange} />
+      <input value={cardHolderResult.cardHolder} type="text" maxLength={50} onChange={cardHolderResult.onChange} />
       <div>오류 :{cardHolderResult.errorMessage}</div>
     </div>
   );
