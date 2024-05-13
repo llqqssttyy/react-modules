@@ -1,6 +1,9 @@
-type ModalPosition = 'center' | 'bottom';
-type CloseButtonType = 'icon' | 'box';
 type ModalSize = 'small' | 'medium' | 'large';
+type ModalPosition = 'center' | 'bottom';
+
+type CloseButtonType = 'icon' | 'box';
+type ModalButtonSize = 'small' | 'fullWidth';
+type ModalButtonVariant = 'primary' | 'secondary';
 
 type HTMLAttributes<T> = React.HTMLAttributes<T>;
 
@@ -17,18 +20,19 @@ interface ContentsProps extends HTMLAttributes<HTMLDivElement> {
   size?: ModalSize;
 }
 
-// Button
-type ButtonProps = Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'>;
+type ButtonAttributes = React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+interface ButtonProps extends ButtonAttributes {
+  onClick: (e: MouseEvent<HTMLButtonElement>) => Promise<void> | void;
+  onSuccess?: () => void;
+  onError?: (error: any) => void;
+}
 
 interface CloseButtonProps extends ButtonProps {
   buttonType?: CloseButtonType;
 }
 
-type ModalButtonSize = 'small' | 'fullWidth';
-type ModalButtonVariant = 'primary' | 'secondary';
-
 interface ModalButtonProps extends ButtonProps {
   size?: ModalButtonSize;
   variant?: ModalButtonVariant;
-  onClick: () => void;
 }

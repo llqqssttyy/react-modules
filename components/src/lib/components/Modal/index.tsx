@@ -8,13 +8,6 @@ import ModalContext from '../../contexts/modalContext';
 import useModalContext from '../../hooks/useModalContext';
 import CloseButtonIcon from './CloseButtonIcon';
 
-/**
- *
- * @param {Object} props
- * @param {string} [props.size] 'small' | 'medium' | 'large' 아무 값도 전달하지 않으면 너비가 contents의 크기 만큼 잡힙니다.
- * @param {string} [props.position = 'center'] 'center' | 'bottom'
- * @default position 'center'
- */
 function Modal({ isModalOpen, closeModal, children, className, size, position, ...attribute }: ModalProps) {
   const contextValue = useMemo(() => ({ isModalOpen, closeModal }), [isModalOpen, closeModal]);
 
@@ -75,19 +68,27 @@ function Description({ children, ...attribute }: HTMLAttributes<HTMLParagraphEle
   );
 }
 
-/**
- * Modal을 닫을 때 사용 가능한 Button입니다.
- *
- * @param {Object} props
- * @param {string} [props.buttonType = 'box'] - 'box' | 'icon'
- * @default buttonType = 'box'
- */
-function CloseButton({ children, buttonType = 'box', className, ...attribute }: CloseButtonProps) {
-  const { closeModal } = useModalContext();
+function CloseButton({
+  buttonType = 'box',
+  onClick,
+  onSuccess,
+  onError,
+  children,
+  className,
+  ...attribute
+}: CloseButtonProps) {
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    try {
+      await onClick(e);
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      if (onError) onError(error);
+    }
+  };
 
   return (
     <button
-      onClick={closeModal}
+      onClick={handleClick}
       className={clsx(className, buttonType ? styles[buttonType] : styles.defaultCloseButton)}
       {...attribute}
     >
@@ -96,27 +97,30 @@ function CloseButton({ children, buttonType = 'box', className, ...attribute }: 
   );
 }
 
-/**
- * Modal 안에서 사용 가능한 Button입니다.
- * @param {Object} props
- *
- * @param {string} [props.size = 'fullWidth'] - 'small' | 'fullWidth'
- * @param {string} [props.variant = 'primary'] - 'primary' | 'secondary'
- * @default size - 'fullWidth'
- * @default variant - 'primary'
- */
 function Button({
-  children,
-  className,
   type = 'button',
   size = 'fullWidth',
   variant = 'primary',
   onClick,
+  onSuccess,
+  onError,
+  children,
+  className,
   ...attribute
 }: ModalButtonProps) {
   const buttonClassName = clsx(className, styles.button, styles[size], styles[variant]);
+
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    try {
+      await onClick(e);
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      if (onError) onError(error);
+    }
+  };
+
   return (
-    <button className={buttonClassName} type={type} onClick={onClick} {...attribute}>
+    <button className={buttonClassName} type={type} onClick={handleClick} {...attribute}>
       {children}
     </button>
   );

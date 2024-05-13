@@ -1,2 +1,3 @@
 export * from './validators';
-export * from './string';
+export * from './stringFormatters';
+export * from './getCardBrand';

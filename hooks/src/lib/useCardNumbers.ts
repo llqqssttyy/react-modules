@@ -1,8 +1,9 @@
 import { ChangeEventHandler, FocusEventHandler } from 'react';
-import { useCardBrand, useSingleInput } from '.';
+import { useSingleInput } from '.';
 import { CARD_BRAND } from './constants';
 import { Validations, Validator, Validators } from './types';
 import { formatWithDelimiter, removeSpaces } from './utils';
+import getCardBrand from './utils/getCardBrand';
 import { validateFilledValue, validateLength, validateNumber } from './utils/validators';
 
 interface ValidationErrors {
@@ -60,9 +61,9 @@ export default function useCardNumbers({ initialValue, validations }: UseCardNum
     }
   };
 
-  const { brand } = useCardBrand({ cardNumbers });
+  const brand = getCardBrand(cardNumbers);
 
-  const formatCardNumber = (cardNumbers: string) => {
+  const formatCardNumbers = (cardNumbers: string) => {
     const segmentLength = brand === 'etc' ? [4, 4, 4, 4] : CARD_BRAND[brand].segmentLength;
 
     const formattedCardNumber = formatWithDelimiter(cardNumbers, segmentLength, ' ');
@@ -73,7 +74,7 @@ export default function useCardNumbers({ initialValue, validations }: UseCardNum
   return {
     brand,
     cardNumbers,
-    formatCardNumber,
+    formatCardNumbers,
     setCardNumbers,
     isValid,
     errorMessage,

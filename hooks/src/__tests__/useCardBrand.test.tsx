@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
-import { useCardBrand } from '../lib';
+import getCardBrand from '../lib/utils/getCardBrand';
 
 const TestComponent = ({ cardNumbers }: { cardNumbers: string }) => {
-  const { brand } = useCardBrand({ cardNumbers });
+  const brand = getCardBrand(cardNumbers);
   return <div data-testid="card-brand">{brand}</div>;
 };
 

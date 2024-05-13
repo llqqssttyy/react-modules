@@ -1,7 +1,7 @@
 import { useCardNumbers } from '../lib';
 
 export default function CardNumbers() {
-  const { cardNumbers, onChange, onBlur, formatCardNumber, errorMessage } = useCardNumbers({
+  const { cardNumbers, onChange, onBlur, formatCardNumbers, errorMessage } = useCardNumbers({
     initialValue: '',
     validations: {
       onChange: {
@@ -16,7 +16,7 @@ export default function CardNumbers() {
   return (
     <div>
       <h3>Card Number</h3>
-      <input maxLength={19} value={formatCardNumber(cardNumbers)} type="text" onChange={onChange} onBlur={onBlur} />
+      <input maxLength={19} value={formatCardNumbers(cardNumbers)} type="text" onChange={onChange} onBlur={onBlur} />
       <div>오류:{errorMessage}</div>
     </div>
   );

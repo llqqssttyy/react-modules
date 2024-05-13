@@ -6,6 +6,7 @@ type FlexProperties = Pick<
 interface FlexProps extends FlexProperties {
   style?: React.CSSProperties;
   children: React.ReactNode;
+  className?: string;
 }
 
 /**
@@ -21,6 +22,7 @@ export default function Flex({
   alignContent = 'stretch',
   gap = '0',
   style,
+  className,
   children,
 }: FlexProps) {
   const flexStyle: React.CSSProperties = {
@@ -34,5 +36,9 @@ export default function Flex({
     ...style,
   };
 
-  return <div style={flexStyle}>{children}</div>;
+  return (
+    <div style={flexStyle} className={className}>
+      {children}
+    </div>
+  );
 }
