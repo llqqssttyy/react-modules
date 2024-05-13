@@ -27,7 +27,7 @@ export default function TermsConditionConfirmModal({
     <Modal position={position} size={size} isModalOpen={isOpen} closeModal={closeModal}>
       <Flex alignItems="center" justifyContent="space-between" style={{ width: '100%' }}>
         <Modal.Title>약관에 동의해 주세요</Modal.Title>
-        {closeButtonType === 'icon' && <Modal.CloseButton buttonType="icon" />}
+        {closeButtonType === 'icon' && <Modal.CloseButton onClick={closeModal} buttonType="icon" />}
       </Flex>
 
       <TermConditions />
@@ -35,7 +35,11 @@ export default function TermsConditionConfirmModal({
       <Modal.Button onClick={action} variant="primary" size="fullWidth">
         동의하고 저장하기
       </Modal.Button>
-      {closeButtonType === 'box' && <Modal.CloseButton buttonType="box">닫기</Modal.CloseButton>}
+      {closeButtonType === 'box' && (
+        <Modal.CloseButton onClick={closeModal} buttonType="box">
+          닫기
+        </Modal.CloseButton>
+      )}
     </Modal>
   );
 }
