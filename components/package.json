@@ -1,6 +1,6 @@
 {
   "name": "llqqssttyy-react-modules-components",
-  "version": "0.0.6",
+  "version": "0.1.1",
   "description": "npm modules",
   "type": "module",
   "types": "dist/index.d.ts",
@@ -33,6 +33,8 @@
     "chromatic": "npx chromatic --project-token=chpt_1ac34bf5c71af9c"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

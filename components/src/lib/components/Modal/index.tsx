@@ -1,26 +1,29 @@
 import { MouseEvent, useMemo } from 'react';
 
 import clsx from 'clsx';
-import styles from './style.module.css';
 
 import ModalPortal from './ModalPortal';
 import ModalContext from '../../contexts/modalContext';
 import useModalContext from '../../hooks/useModalContext';
 import CloseButtonIcon from './CloseButtonIcon';
+import * as S from './styles';
 
 function Modal({ isModalOpen, closeModal, children, className, size, position, ...attribute }: ModalProps) {
   const contextValue = useMemo(() => ({ isModalOpen, closeModal }), [isModalOpen, closeModal]);
 
   if (!isModalOpen) return null;
   return (
-    <ModalContext.Provider value={contextValue}>
-      <ModalPortal>
-        <Backdrop />
-        <Contents className={className} size={size} position={position} {...attribute}>
-          {children}
-        </Contents>
-      </ModalPortal>
-    </ModalContext.Provider>
+    <>
+      <S.GlobalStyles />
+      <ModalContext.Provider value={contextValue}>
+        <ModalPortal>
+          <Backdrop />
+          <Contents className={className} size={size} position={position} {...attribute}>
+            {children}
+          </Contents>
+        </ModalPortal>
+      </ModalContext.Provider>
+    </>
   );
 }
 
@@ -33,39 +36,26 @@ function Backdrop() {
     }
   };
 
-  return <div className={styles.backdrop} onClick={onClick} />;
+  return <S.Backdrop onClick={onClick} />;
 }
 
-function Contents({ size, position = 'center', children, className, ...attribute }: ContentsProps) {
+function Contents({ size, position, children, className, ...attribute }: ContentsProps) {
   return (
-    <div
-      className={clsx(
-        className,
-        styles.contents,
-        size ? styles[size] : styles.fitContent,
-        position ? styles[position] : styles.defaultPosition,
-      )}
+    <S.Contents
+      className={clsx(className, size ? size : 'fitContent', position ? position : 'defaultPosition')}
       {...attribute}
     >
       {children}
-    </div>
+    </S.Contents>
   );
 }
 
 function Title({ children, ...attribute }: HTMLAttributes<HTMLHeadingElement>) {
-  return (
-    <h2 className={styles.title} {...attribute}>
-      {children}
-    </h2>
-  );
+  return <S.Title {...attribute}>{children}</S.Title>;
 }
 
 function Description({ children, ...attribute }: HTMLAttributes<HTMLParagraphElement>) {
-  return (
-    <p className={styles.description} {...attribute}>
-      {children}
-    </p>
-  );
+  return <S.Description {...attribute}>{children}</S.Description>;
 }
 
 function CloseButton({
@@ -87,13 +77,13 @@ function CloseButton({
   };
 
   return (
-    <button
+    <S.CloseButton
       onClick={handleClick}
-      className={clsx(className, buttonType ? styles[buttonType] : styles.defaultCloseButton)}
+      className={clsx(className, buttonType ? buttonType : 'defaultCloseButton')}
       {...attribute}
     >
       {buttonType === 'box' ? children : <CloseButtonIcon />}
-    </button>
+    </S.CloseButton>
   );
 }
 
@@ -108,8 +98,6 @@ function Button({
   className,
   ...attribute
 }: ModalButtonProps) {
-  const buttonClassName = clsx(className, styles.button, styles[size], styles[variant]);
-
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
     try {
       await onClick(e);
@@ -120,9 +108,9 @@ function Button({
   };
 
   return (
-    <button className={buttonClassName} type={type} onClick={handleClick} {...attribute}>
+    <S.Button className={clsx(className, size, variant)} type={type} onClick={handleClick} {...attribute}>
       {children}
-    </button>
+    </S.Button>
   );
 }
 

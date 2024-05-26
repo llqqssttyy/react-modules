@@ -1,7 +1,12 @@
 import { ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import styled from '@emotion/styled';
 
-import styles from './style.module.css';
+const Portal = styled.div`
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+`;
 
 interface ModalPortalProps {
   children: ReactNode;
@@ -22,11 +27,5 @@ export default function ModalPortal({ children }: ModalPortalProps) {
     };
   }, []);
 
-  return createPortal(
-    <div id="modal-portal-root" className={styles.portal}>
-      {children}
-    </div>,
-    $body,
-    'modal-portal',
-  );
+  return createPortal(<Portal id="modal-portal-root">{children}</Portal>, $body, 'modal-portal');
 }
