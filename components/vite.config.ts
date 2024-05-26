@@ -6,13 +6,17 @@ import dts from 'vite-plugin-dts';
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, 'src/lib/index.ts'),
-      name: 'index',
+      entry: path.resolve(__dirname, 'src/lib/index.tsx'),
+      name: 'llqqssttyy-react-modules-components',
+      formats: ['es', 'cjs', 'umd'],
       fileName: 'index',
     },
     rollupOptions: {
       external: ['react'],
       output: {
+        dir: 'dist',
+        format: 'es',
+        entryFileNames: '[name].js',
         globals: {
           react: 'React',
         },

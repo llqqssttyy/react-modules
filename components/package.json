@@ -1,11 +1,25 @@
 {
   "name": "llqqssttyy-react-modules-components",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "npm modules",
   "type": "module",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs.js"
+    },
+    "./components": {
+      "import": "./dist/components.js",
+      "require": "./dist/components.cjs.js"
+    },
+    "./hooks": {
+      "import": "./dist/hooks.js",
+      "require": "./dist/hooks.cjs.js"
+    }
+  },
   "files": [
     "dist"
   ],
